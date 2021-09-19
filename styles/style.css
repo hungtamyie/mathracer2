@@ -1,0 +1,47 @@
+body {
+    margin: 0px;
+    overflow: hidden;
+}
+
+#gameScreen {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: #49ad1b;
+}
+
+.domSprite {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: block;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;          /* Firefox */
+    image-rendering: -o-crisp-edges;            /* Opera */
+    image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming)*/
+    -ms-interpolation-mode: nearest-neighbor;   /* IE (non-standard property) */
+    image-rendering: pixelated; /* Webkit (non-standard naming)*/
+}
+
+.enlarged {
+    width: 50%;
+}
+
+.hitboxCanvas {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: block;
+    z-index: 100000;
+}
+
+#editorTools {
+    z-index: 200000;
+    width: 1000px;
+    height: 100px;
+    background: grey;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: none;
+}

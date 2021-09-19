@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>My website</title>
+        <style>
+            body {
+                margin: 0px;
+            }
+            
+            #gameScreen {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+            }
+            
+            .domSprite {
+                position: absolute;
+                display: block;
+                 image-rendering: crisp-edges;
+                image-rendering: -moz-crisp-edges;          /* Firefox */
+                image-rendering: -o-crisp-edges;            /* Opera */
+                image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming)*/
+                -ms-interpolation-mode: nearest-neighbor;   /* IE (non-standard property) */
+                image-rendering: pixelated; /* Webkit (non-standard naming)*/
+            }
+        </style>
+    </head>
+    <body>
+        <img src="allentitysheet.png" id="entitysheet" onload="start()" style="display: none;">
+        <div id="gameScreen"></div>
+    </body>
+    <script>
+        
+        class DomSprite{
+            constructor(img){
+                this.sprite = document.createElement("canvas");
+                this.sprite.className = "domSprite";
+                this.spriteCtx = this.sprite.getContext("2d");
+                this.spriteCtx.imageSmoothingEnabled = false;
+                this.imageRef = img;
+            }
+            appendSprite(screen){
+                document.getElementById(screen).appendChild(this.sprite);
+            }
+            updateDrawing(sx, sy, sw, sh, scale){
+                if(!scale){
+                    scale = 1;
+                }
+                this.sprite.width = sw * scale;
+                this.sprite.height = sh * scale;
+                this.spriteCtx.mozImageSmoothingEnabled = false;
+                this.spriteCtx.webkitImageSmoothingEnabled = false;
+                this.spriteCtx.msImageSmoothingEnabled = false;
+                this.spriteCtx.imageSmoothingEnabled = false;
+                this.spriteCtx.drawImage(document.getElementById(this.imageRef), sx * scale, sy * scale, sw * scale, sh * scale, 0, 0, sw * scale, sh * scale);
+            }
+            updatePosition(dx, dy, dw, dh){
+                this.sprite.style.left =    dx + "px";
+                this.sprite.style.top =     dy + "px";
+                this.sprite.style.width =   dw + "px";
+                this.sprite.style.height =  dh + "px";
+            }
+            deleteSprite(){
+                this.sprite.remove();
+            }
+        }
+        
+        function start(){
+            let sprite = new DomSprite("entitysheet");
+            sprite.appendSprite("gameScreen");
+            sprite.updateDrawing(0, 4, 4, 3, 32);
+            
+            let sprite2 = new DomSprite("entitysheet");
+            sprite2.appendSprite("gameScreen");
+            sprite2.updateDrawing(2, 4, 4, 3, 32);
+            sprite2.updatePosition(500, 200, 400, 300);
+        }
+        
+        function replaceCanvasColors(targetCanvas, targetCtx, colors){
+            var imageData = targetCtx.getImageData(0, 0, targetCanvas.width, targetCanvas.height);
+            for (var i=0;i<imageData.data.length;i+=4)
+              {
+                  for (let c = 0; c < colors.length; c++) {
+                    let replacement = colors[c];
+                    if(imageData.data[i]==replacement[0] &&
+                        imageData.data[i+1]==replacement[1] &&
+                        imageData.data[i+2]==replacement[2]
+                     ){
+                        imageData.data[i]=replacement[3];
+                        imageData.data[i+1]=replacement[4];
+                        imageData.data[i+2]=replacement[5];
+                     }
+                  }
+              }
+            targetCtx.putImageData(imageData,0,0);
+        }
+    </script>
+</html>
