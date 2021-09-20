@@ -8,6 +8,7 @@ class Renderer {
             zoom: 1,
         };
         this.domSprites = {};
+        this.particles = [];
         this.hitboxDebugger = false;
         if(this.hitboxDebugger == true){
             this.hitboxCanvas = document.createElement("canvas");
@@ -52,7 +53,7 @@ class Renderer {
                         }
                         
                         this.updateEntityPosition(entity);
-                        if(entity.hasComponent("automatedAnimation")){
+                        if(entity.hasComponent("automatedAnimation") && entityVisualData.noShow == false){
                             let automatedAnimation = entity.automatedAnimation;
                             this.domSprites["domSprite_" + entity.id].updateDrawing(
                                 entityVisualData.sx + automatedAnimation.frameOffsetX * automatedAnimation.currentFrame,
@@ -120,6 +121,7 @@ class Renderer {
                 }
             }
         }
+    
     }
     
     trackCarWithCamera(delta, carId){
@@ -155,20 +157,46 @@ class Renderer {
     updateEntityPosition(entity){
         let domSprite = this.domSprites["domSprite_" + entity.id];
         let entityVisualData = entity.getComponent("visualData");
+        let dxOffset = 0;
+        let dyOffset = 0;
+        let dwOffset = 0;
+        let dhOffset = 0;
+        for(let i = 0; i < entityVisualData.filters.length; i++){
+            let filter = entityVisualData.filters[i];
+            if(filter.type == "opacity"){
+                this.domSprites["domSprite_" + entity.id].setOpacity(filter.value);
+            }
+            if(filter.type == "squash"){
+                    dxOffset = (Math.abs(Math.cos(filter.value)) * filter.movementAmount*filter.value/5 - Math.abs(Math.sin(filter.value)) * filter.movementAmount*filter.value/5)/-2;
+                    dwOffset = Math.abs(Math.cos(filter.value)) * filter.movementAmount*filter.value/5 - Math.abs(Math.sin(filter.value)) * filter.movementAmount*filter.value/5;
+
+                    dyOffset = (Math.abs(Math.sin(filter.value)) * filter.movementAmount*filter.value/5 - Math.abs(Math.cos(filter.value)) * filter.movementAmount*filter.value/5)/-1.5;
+                    dhOffset = Math.abs(Math.sin(filter.value)) * filter.movementAmount*filter.value/5 - Math.abs(Math.cos(filter.value)) * filter.movementAmount*filter.value/5
+            }
+            if(filter.type == "shake"){
+                dxOffset = (Math.abs(Math.cos(filter.value)) * filter.movementAmount*filter.value/5 - Math.abs(Math.sin(filter.value)) * filter.movementAmount*filter.value/5)/-2;
+            }
+        }
+        
         let entityWidth = (entityVisualData.sw * entityVisualData.scale);
         let entityHeight = (entityVisualData.sh * entityVisualData.scale);
         
-        let dx = entity.position.x - entityWidth/2;
-        let dy = entity.position.y/2 - entityHeight/2 + entityVisualData.dh;
-        let dw = entityWidth;
-        let dh = entityHeight;
+        let dx = entity.position.x + dxOffset - entityWidth/2;
+        let dy = entity.position.y/2 + dyOffset - entityHeight/2 + entityVisualData.dh;
+        let dw = entityWidth + dwOffset;
+        let dh = entityHeight + dhOffset;
         let m = this.cameraMatrix(dx, dy, dw, dh);
         domSprite.updatePosition(m[0], m[1], m[2], m[3]);
         if(entity.type == "background"){
             domSprite.updateZIndex(-10000);
         }
         else {
-            domSprite.updateZIndex(entity.position.y);
+            if(entityVisualData.forceZIndex != false){
+                domSprite.updateZIndex(entityVisualData.forceZIndex);
+            }
+            else {
+                domSprite.updateZIndex(Math.round(entity.position.y/2));
+            }
         }
     }
     

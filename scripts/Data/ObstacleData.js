@@ -11,7 +11,20 @@ var OBSTACLE_DATA = {
             radius: 13,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            }
+        },
     },
     "treeB": {
         sx: 3,
@@ -25,7 +38,20 @@ var OBSTACLE_DATA = {
             radius: 15,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            }
+        },
     },
     "treeC": {
         sx: 6,
@@ -39,7 +65,20 @@ var OBSTACLE_DATA = {
             radius: 13,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            }
+        },
     },
     "treeD": {
         sx: 0,
@@ -53,7 +92,20 @@ var OBSTACLE_DATA = {
             radius: 15,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            }
+        },
     },
     "treeE": {
         sx: 4,
@@ -67,7 +119,20 @@ var OBSTACLE_DATA = {
             radius: 15,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            }
+        },
     },
     "treeF": {
         sx: 4,
@@ -81,7 +146,20 @@ var OBSTACLE_DATA = {
             radius: 15,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            }
+        },
     },
     "treeG": {
         sx: 8,
@@ -95,7 +173,20 @@ var OBSTACLE_DATA = {
             radius: 10,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            },
+        },
     },
     "treeH": {
         sx: 8,
@@ -109,7 +200,20 @@ var OBSTACLE_DATA = {
             radius: 12,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1.1,
+            },
+            particles: {
+                type: "tree_bark",
+                amount: 10,
+                speedThreshold: 5,
+                flightSpeed: [3,10],
+            }
+        },
     },
     "rockA": {
         sx: 2,
@@ -123,7 +227,14 @@ var OBSTACLE_DATA = {
             radius: 18,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "rockB": {
         sx: 1,
@@ -137,7 +248,14 @@ var OBSTACLE_DATA = {
             radius: 10,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "rockC": {
         sx: 4,
@@ -151,7 +269,14 @@ var OBSTACLE_DATA = {
             radius: 18,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "rockE": {
         sx: 4,
@@ -165,7 +290,14 @@ var OBSTACLE_DATA = {
             radius: 14,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "rockF": {
         sx: 5,
@@ -193,7 +325,14 @@ var OBSTACLE_DATA = {
             radius: 6,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "tire": {
         sx: 0,
@@ -207,7 +346,14 @@ var OBSTACLE_DATA = {
             radius: 8,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "squash",
+                value: 30,
+                changeRate: 1, 
+                movementAmount: 2,
+            }
+        },
     },
     "tireGrass": {
         sx: 1,
@@ -221,7 +367,14 @@ var OBSTACLE_DATA = {
             radius: 8,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "squash",
+                value: 30,
+                changeRate: 1, 
+                movementAmount: 2,
+            }
+        },
     },
     "tireShort": {
         sx: 2,
@@ -235,7 +388,14 @@ var OBSTACLE_DATA = {
             radius: 8,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "squash",
+                value: 30,
+                changeRate: 1, 
+                movementAmount: 2,
+            }
+        },
     },
     "pillar": {
         sx: 6,
@@ -249,7 +409,14 @@ var OBSTACLE_DATA = {
             radius: 9,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "cone": {
         sx: 6,
@@ -263,7 +430,14 @@ var OBSTACLE_DATA = {
             radius: 6,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1,
+            }
+        },
     },
     "coneGrass": {
         sx: 7,
@@ -277,7 +451,14 @@ var OBSTACLE_DATA = {
             radius: 6,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            filter: {
+                type: "shake",
+                value: 30,
+                changeRate: 2, 
+                movementAmount: 1,
+            }
+        },
     },
     "barrierLeft": {
         sx: 0,
@@ -291,7 +472,14 @@ var OBSTACLE_DATA = {
             radius: 8,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "barrierRight": {
         sx: 1,
@@ -305,7 +493,14 @@ var OBSTACLE_DATA = {
             radius: 8,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "barrierUp": {
         sx: 3,
@@ -319,7 +514,14 @@ var OBSTACLE_DATA = {
             radius: 6,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     "barrierSide": {
         sx: 4,
@@ -333,7 +535,14 @@ var OBSTACLE_DATA = {
             radius: 8,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            }
+        },
     },
     
     "pitStopFront": {

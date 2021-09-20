@@ -16,6 +16,7 @@ window.onload = function(){
     }
     let imagesToLoad = [["entities", "images/entities.png"],
                         ["checkpoints", "images/checkpoints.png"],
+                        ["particles", "images/particles.png"],
                         ["Isere_map", "images/maps/isere_map.png"],
                         ["Isere_data", "images/maps/isere_data.png"],
                         ["striker", "images/cars/striker.png"],

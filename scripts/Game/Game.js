@@ -6,6 +6,7 @@ class Game {
         this.obstacles = {};
         this.ghosts = {};
         this.checkpoints = {};
+        this.particles = {};
         this.playerCar;
         this.checkpointData = {
             order: [],
@@ -34,6 +35,7 @@ class Game {
         newCar.carPhysics.direction.x = carDir.x;
         newCar.carPhysics.direction.y = carDir.y;
         newCar.addComponent("carSpecs", (new CarSpecs(carPreset.car)));
+        newCar.addComponent("particleCounter", (new ParticleCounter(0)));
         if(carPreset.spoiler != "none"){
             newCar.carSpecs.applyModifiers(CAR_DATA[carPreset.car].spoilers[carPreset.spoiler].modifiers);
         }
@@ -51,6 +53,7 @@ class Game {
         let background = new Entity("background");
         background.addComponent("position", (new Position(0,0)));
         background.addComponent("visualData", (new VisualData((this.mapName + "_map"), 0, 0, width, height)));
+         background.visualData.forceZIndex = -10000;
         this.entities[background.id] = background;
     }
     loadInObstacles(){
@@ -69,7 +72,7 @@ class Game {
         let y = checkpoints[0][1];
         checkpoint.addComponent("visualData", new VisualData("checkpoints", 0, 0, 5, 3, 32, 50))
         checkpoint.addComponent("position", (new Position(x,y)));
-        checkpoint.addComponent("automatedAnimation", new AutomatedAnimation(2, 1, 0, 3));
+        checkpoint.addComponent("automatedAnimation", new AutomatedAnimation(3, 1, 0, 3));
         checkpoint.addComponent("hitbox", new Hitbox([{type: "line", p1: {x: x -50, y: 300}, p2: {x: x + 50, y: 200}}]));
         checkpoint.visualData.noShow = false;
         this.checkpointData.order.push(checkpoint.id);
@@ -82,7 +85,7 @@ class Game {
             let y = checkpoints[i][1];
             checkpoint.addComponent("visualData", new VisualData("checkpoints", 5, 0, 2, 1, 32, 0))
             checkpoint.addComponent("position", (new Position(x,y)));
-            checkpoint.addComponent("automatedAnimation", new AutomatedAnimation(8, 2, 0, 1));
+            checkpoint.addComponent("automatedAnimation", new AutomatedAnimation(9, 2, 0, 1, false));
             checkpoint.addComponent("hitbox", new Hitbox([{type: "circle", center: {x: x,y: y}, radius: 120}]));
             checkpoint.visualData.noShow = true;
             this.checkpointData.order.push(checkpoint.id);
@@ -163,6 +166,27 @@ class Game {
                 if(entity.hasComponent("automatedAnimation")){
                     entity.automatedAnimation.update(delta);
                 }
+                if(entity.hasComponent("particleCounter")){
+                    entity.particleCounter.update(delta);
+                }
+                if(entity.hasComponent("particlePhysics")){
+                    entity.particlePhysics.update(delta);
+                    entity.position.x += entity.particlePhysics.velocity.x * delta;
+                    entity.position.y += entity.particlePhysics.velocity.y * delta;
+                    if(entity.particlePhysics.gravity == true){
+                        entity.particlePhysics.velocity.y += 0.4*delta;
+                    }
+                    //console.log(entity.particlePhysics.lifetime)
+                    if(entity.particlePhysics.lifetime <= 0){
+                        this.deleteEntity(entity.id);
+                    }
+                }
+                if(entity.hasComponent("visualData")){
+                    entity.visualData.updateFilters(delta);
+                }
+                if(entity.hasComponent("carPhysics")){
+                    this.createCarParticles(entity);
+                }
             }
         }
         if(this.playerCar){
@@ -171,6 +195,11 @@ class Game {
             this.collideCar(this.playerCar);
             this.checkCheckpoints(this.playerCar);
         }
+    }
+    
+    deleteEntity(id){
+        G.gameController.renderer.domSprites["domSprite_" + id].deleteSprite();
+        delete this.entities[id];
     }
     
     updateCarPhysics(delta, car){
@@ -352,12 +381,39 @@ class Game {
                         let collisionNormal = new Vector(collisionResult[0] - car.position.x, collisionResult[1] - car.position.y);
                         collisionNormal.normalize();
                         let collisionProjection = collisionNormal.multiply(((car.carPhysics.velocity.dot(collisionNormal)) / (collisionNormal.getMagnitude() ** 2)).toFixed(5)*1||1);
-
+                        
+                        let hitBehavior = OBSTACLE_DATA[obstacle.obstacleSpecs.obstacleType].hitBehavior;
+                        if(hitBehavior != "none"){
+                            this.applyHitBehavior(collisionResult[0], collisionResult[1], obstacle, hitBehavior, collisionProjection.getMagnitude(), car.carPhysics.velocity.copy())
+                        }
                         collisionProjection.multiplyBy(-obstacle.obstacleSpecs.bounce);
                         car.carPhysics.velocity.addTo(collisionProjection);
                     }
                 }
 
+            }
+        }
+    }
+    
+    applyHitBehavior(x, y, obstacle, hitBehavior, hitSpeed, playerVelocity){
+        console.log(hitBehavior)
+        if(typeof(hitBehavior.filter) != "undefined"){
+            let filter = JSON.parse(JSON.stringify(hitBehavior.filter));
+            filter.value = hitSpeed*2;
+            obstacle.visualData.addFilter(filter);
+        }
+        if(typeof(hitBehavior.particles) != "undefined" && hitSpeed > hitBehavior.particles.speedThreshold){
+            console.log("yeah")
+            for(let i = 0; i < hitBehavior.particles.amount; i++){
+                let velocityVector = new Vector(1,0);
+                velocityVector.setDirection(playerVelocity.getDirection());
+                velocityVector.multiplyBy(-1);
+                velocityVector.setDirection(velocityVector.getDirection() + getRandomInt(-10,10)/6);
+                velocityVector.setMagnitude(getRandomInt(hitBehavior.particles.flightSpeed[0]/2,hitBehavior.particles.flightSpeed[1]/2));
+                velocityVector.y -= 3;
+                let particleOptions = PARTICLE_DATA[hitBehavior.particles.type];
+                let particleType = particleOptions[getRandomInt(0,particleOptions.length-1)];
+                this.createParticle(x,y-5,particleType, velocityVector.x, velocityVector.y, 1, true);
             }
         }
     }
@@ -379,9 +435,105 @@ class Game {
         this.checkpointData.previousDistanceFromNext = distance;
     }
 
-
-
-
+    createCarParticles(car){
+        car.particleCounter.setSpeed(PARTICLE_CREATION_RATE[car.carPhysics.currentTerrain]);
+        let carPhysics = car.carPhysics;
+        //let particleType = PARTICLE_DATA[MAP_DATA[this.mapName].particleEffects[car.carPhysics.currentTerrain]]
+        if(car.particleCounter.makeParticleThisTick){
+            let particleChoices = PARTICLE_DATA[MAP_DATA[this.mapName].particleEffects[carPhysics.currentTerrain]];
+            let particleType = particleChoices[getRandomInt(0,particleChoices.length-1)];
+            let carSpeed = carPhysics.velocity.getMagnitude();
+            if(particleType){
+                if(carPhysics.currentTerrain == "ROAD" || carPhysics.currentTerrain == "PIT_ROAD" || carPhysics.currentTerrain == "CONCRETE"){
+                    if(carPhysics.slideAngle > 0.35 && carPhysics.velocityDirection > 0 && carPhysics.velocity.getMagnitude() > 0){
+                        let wheelOffsetVector = carPhysics.direction.copy();
+                        wheelOffsetVector.multiplyBy(-10);
+                        wheelOffsetVector.setDirection(wheelOffsetVector.getDirection() - 0.5);
+                        this.createParticle(car.position.x + wheelOffsetVector.x, car.position.y + wheelOffsetVector.y, particleType, 0, 0, 1);
+                        wheelOffsetVector.setDirection(wheelOffsetVector.getDirection() + 1);
+                        particleType = particleChoices[getRandomInt(0,particleChoices.length-1)];
+                        this.createParticle(car.position.x + wheelOffsetVector.x, car.position.y + wheelOffsetVector.y, particleType, 0, 0, 1);
+                        
+                    }
+                }
+                else if(carPhysics.currentTerrain == "DIRT"){
+                    if(carPhysics.accelerating == 1){
+                        let sprayDirection = carPhysics.direction.copy();
+                        sprayDirection.multiplyBy(getRandomInt(-60,-20)/10);
+                        sprayDirection.setDirection(sprayDirection.getDirection() + getRandomInt(-20,20)/50);
+                        this.createParticle(car.position.x, car.position.y, particleType, sprayDirection.x, sprayDirection.y, carSpeed);
+                    }
+                    else if(carPhysics.accelerating == 0){
+                        if(carPhysics.velocity.getMagnitude() > 0.1){
+                            this.createParticle(car.position.x, car.position.y, particleType, getRandomInt(-10,10)*carSpeed/20, getRandomInt(-10,10)*carSpeed/20, carSpeed);
+                        }
+                    }
+                    else {
+                        let sprayDirection = carPhysics.direction.copy();
+                        sprayDirection.multiplyBy(getRandomInt(30,10)/10);
+                        sprayDirection.setDirection(sprayDirection.getDirection() + getRandomInt(-20,20)/50);
+                        this.createParticle(this, car.position.x, car.position.y, particleType, sprayDirection.x, sprayDirection.y, carSpeed);
+                    }
+                }
+                else if(carPhysics.currentTerrain == "GRASS"){
+                    if(carPhysics.accelerating == 1){
+                            let sprayDirection = carPhysics.direction.copy();
+                            sprayDirection.multiplyBy(-getRandomInt(80,100)/10);
+                            sprayDirection.setDirection(sprayDirection.getDirection() + getRandomInt(-30,30)/50);
+                            //createParticle(this, car.position.x, car.position.y, particleType, sprayDirection.x, sprayDirection.y, 1);
+                            let wheelOffsetVector = carPhysics.direction.copy();
+                            wheelOffsetVector.multiplyBy(-10);
+                            wheelOffsetVector.setDirection(wheelOffsetVector.getDirection() - 0.5);
+                            this.createParticle(car.position.x + wheelOffsetVector.x, car.position.y + wheelOffsetVector.y, particleType, sprayDirection.x, sprayDirection.y, getRandomInt(50,100)/100);
+                            wheelOffsetVector.setDirection(wheelOffsetVector.getDirection() + 1);
+                            particleType = particleChoices[getRandomInt(0,particleChoices.length-1)];
+                            this.createParticle(car.position.x + wheelOffsetVector.x, car.position.y + wheelOffsetVector.y, particleType, sprayDirection.x, sprayDirection.y, getRandomInt(50,100)/100);
+                    }
+                    else {
+                        if(carSpeed > 2){
+                            let sprayDirection = carPhysics.direction.copy();
+                            sprayDirection.multiplyBy(-getRandomInt(20,30)/10);
+                            sprayDirection.setDirection(sprayDirection.getDirection() + getRandomInt(-30,30)/50);
+                            //createParticle(this, car.position.x, car.position.y, particleType, sprayDirection.x, sprayDirection.y, 1);
+                            let wheelOffsetVector = carPhysics.direction.copy();
+                            wheelOffsetVector.multiplyBy(-10);
+                            wheelOffsetVector.setDirection(wheelOffsetVector.getDirection() - 0.5);
+                            this.createParticle(car.position.x + wheelOffsetVector.x, car.position.y + wheelOffsetVector.y, particleType, sprayDirection.x, sprayDirection.y, getRandomInt(50,100)/100);
+                            wheelOffsetVector.setDirection(wheelOffsetVector.getDirection() + 1);
+                            particleType = particleChoices[getRandomInt(0,particleChoices.length-1)];
+                            this.createParticle(car.position.x + wheelOffsetVector.x, car.position.y + wheelOffsetVector.y, particleType, sprayDirection.x, sprayDirection.y, getRandomInt(50,100)/100);
+                        }
+                    }
+                }
+            }
+        }
+        //console.log(particle);
+        /*{
+            sx: 0,
+            sy: 0,
+            size: 16,
+            frames: 3,
+            randomize: true,
+            durationPerFrame: 15,
+            destroyAfterFirstLoop: false,
+            fadeSpeed: 0,
+        }*/
+    }
+    
+    createParticle(x, y, particleType, velocityX, velocityY, opacity, forceIndex){
+        let particle = new Entity("particle");
+        particle.addComponent("position", new Position(x, y));
+        particle.addComponent("particlePhysics", new ParticlePhysics(particleType));
+        particle.addComponent("automatedAnimation", new AutomatedAnimation(particleType.frames, particleType.frameChangeSpeed, 1, 0, particleType.randomize));
+        particle.addComponent("visualData", new VisualData("particles", particleType.sx, particleType.sy, 1, 1, particleType.size));
+        particle.visualData.addFilter({type: "opacity", value: opacity, changeRate: particleType.fadeSpeed});
+        if(forceIndex){
+            particle.visualData.forceZIndex = 10000;
+        }
+        particle.particlePhysics.setVelocity(new Vector(velocityX, velocityY))
+        this.entities[particle.id] = particle;
+        return particle; 
+    }
 
 
 

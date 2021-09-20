@@ -36,6 +36,9 @@ class DomSprite{
     show(){
         this.sprite.style.display = "block";
     }
+    setOpacity(opacity){
+        this.sprite.style.opacity = opacity;
+    }
     deleteSprite(){
         this.sprite.remove();
     }

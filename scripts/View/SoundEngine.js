@@ -19,7 +19,7 @@ class SoundEngine {
         
         carSoundHandler.playSoundByRpm(carPhysics.rpm);
         let slideVolume = carPhysics.slideAngle;
-        if(currentTerrain == "DIRT" && (carSpeed > 0.1 || carPhysics.accelerating == 1)){
+        if(currentTerrain == "DIRT" && (carSpeed > 1 || carPhysics.accelerating == 1)){
             carSoundHandler.playSlideSoundBySlide(0.4);
             carSoundHandler.playSquealSoundBySlide(0);
         }

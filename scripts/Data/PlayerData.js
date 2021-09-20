@@ -4,6 +4,7 @@ var PlayerData = {
             fps: 70,
             carDrawDepth: 2,
             carDrawDirections: 92,
+            particleNumber: 50,
         },
         keybinds: {
             drive: "w",
@@ -18,7 +19,7 @@ var PlayerData = {
             distanceInFront: 30,
         }
     },
-    chosenPreset: 0,
+    chosenPreset: 2,
     carPresets: [
         {
             name: "Preset_1",
@@ -45,7 +46,7 @@ var PlayerData = {
             wheels: "crimsons",
             decal: "stripe",
             spoiler: "series8",
-            carColor: [[11, 25, 245], [21, 145, 251], [22, 179, 252]],
+            carColor: [[54, 158, 122], [47, 186, 102], [31, 210, 43]],
             trimColor: [255, 255, 200],
             decalColor: [10, 255, 250],
             gas: "canola",
@@ -57,6 +58,26 @@ var PlayerData = {
                 boost: 0,
                 tractionControl: 0,
             },
-        }
+        },
+        {
+            name: "Preset_3",
+            car: "striker",
+            wheels: "standard",
+            decal: "stripe",
+            spoiler: "stock",
+            carColor: [[207, 187, 39], [214, 190, 32], [234, 212, 67]],
+            trimColor: [255, 255, 200],
+            decalColor: [255, 0, 15],
+            gas: "canola",
+            upgrades: {
+                acceleration: 1,
+                topSpeed: 0,
+                braking: 0,
+                handling: 0,
+                boost: 0,
+                tractionControl: 0,
+            },
+        },
+        
     ]
 }
