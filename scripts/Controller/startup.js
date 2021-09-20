@@ -23,11 +23,14 @@ window.onload = function(){
                         ["kart", "images/cars/kart.png"]];
     let soundsToLoad = [
         ["striker_idle", "sounds/car/striker_idle.wav"],
-        ["striker_100rpm", "sounds/car/striker_100rpm.wav"],
+        ["striker_100rpm", "sounds/car/striker_idle.wav"],
         ["kart_idle", "sounds/car/kart_idle.wav"],
         ["kart_100rpm", "sounds/car/kart_100rpm.wav"],
         ["squeal_loop", "sounds/sfx/squeal_loop.wav"],
-        ["slide_loop", "sounds/sfx/slide_loop.wav"]
+        ["slide_loop", "sounds/sfx/slide_loop.wav"],
+        ["tire_hit", "sounds/sfx/tire_hit.wav"],
+        ["rock_hit", "sounds/sfx/rock_hit.wav"],
+        ["tree_hit", "sounds/sfx/tree_hit.wav"],
     ];
     G.assetHandler = new AssetHandler();
     
@@ -42,6 +45,7 @@ window.onload = function(){
                 G.inputHandler.addListener(G.gameController);
                 G.gameController.createNewGame("Isere");
                 G.gameController.addMyCar();
+                G.soundEngine.coupleToGame(G.gameController.game);
                 G.gameController.start();
                 //G.mapEditor = new MapEditor();
             });

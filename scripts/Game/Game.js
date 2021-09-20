@@ -6,13 +6,17 @@ class Game {
         this.obstacles = {};
         this.ghosts = {};
         this.checkpoints = {};
-        this.particles = {};
         this.playerCar;
         this.checkpointData = {
             order: [],
             next: 0,
             previousDistanceFromNext: Infinity,
         };
+        this.physicsOutputStream = new OutputStream();
+        let self = this;
+        this.collisionListenerId = "listen_" + makeId(10);
+        this.physicsOutputStream.addListener(this.collisionListenerId, "collision", function(data){self.applyHitBehavior(data.x, data.y, data.obstacle, data.hitSpeed, data.playerVelocity)});
+        
         
         this.loadInBackground();
         this.loadInObstacles();
@@ -160,6 +164,7 @@ class Game {
     
     tick(delta){     
         let entities = this.entities
+        let particleNumber = 0;
         for (const key in entities) {   
             if (entities.hasOwnProperty(key)) {
                 let entity = entities[key];
@@ -170,6 +175,7 @@ class Game {
                     entity.particleCounter.update(delta);
                 }
                 if(entity.hasComponent("particlePhysics")){
+                    particleNumber++
                     entity.particlePhysics.update(delta);
                     entity.position.x += entity.particlePhysics.velocity.x * delta;
                     entity.position.y += entity.particlePhysics.velocity.y * delta;
@@ -189,6 +195,7 @@ class Game {
                 }
             }
         }
+        console.log(particleNumber);
         if(this.playerCar){
             this.updateCarHitbox(this.playerCar);
             this.updateCarPhysics(delta, this.playerCar);
@@ -381,11 +388,8 @@ class Game {
                         let collisionNormal = new Vector(collisionResult[0] - car.position.x, collisionResult[1] - car.position.y);
                         collisionNormal.normalize();
                         let collisionProjection = collisionNormal.multiply(((car.carPhysics.velocity.dot(collisionNormal)) / (collisionNormal.getMagnitude() ** 2)).toFixed(5)*1||1);
-                        
-                        let hitBehavior = OBSTACLE_DATA[obstacle.obstacleSpecs.obstacleType].hitBehavior;
-                        if(hitBehavior != "none"){
-                            this.applyHitBehavior(collisionResult[0], collisionResult[1], obstacle, hitBehavior, collisionProjection.getMagnitude(), car.carPhysics.velocity.copy())
-                        }
+
+                        this.physicsOutputStream.reportEvent("collision", {x: collisionResult[0], y: collisionResult[1], obstacle: obstacle, hitSpeed: collisionProjection.getMagnitude(), playerVelocity: car.carPhysics.velocity.copy()})
                         collisionProjection.multiplyBy(-obstacle.obstacleSpecs.bounce);
                         car.carPhysics.velocity.addTo(collisionProjection);
                     }
@@ -395,8 +399,11 @@ class Game {
         }
     }
     
-    applyHitBehavior(x, y, obstacle, hitBehavior, hitSpeed, playerVelocity){
-        console.log(hitBehavior)
+    applyHitBehavior(x, y, obstacle, hitSpeed, playerVelocity){
+        let hitBehavior = OBSTACLE_DATA[obstacle.obstacleSpecs.obstacleType].hitBehavior;
+        if(hitBehavior == "none"){
+            return;
+        }
         if(typeof(hitBehavior.filter) != "undefined"){
             let filter = JSON.parse(JSON.stringify(hitBehavior.filter));
             filter.value = hitSpeed*2;
@@ -470,9 +477,10 @@ class Game {
                     }
                     else {
                         let sprayDirection = carPhysics.direction.copy();
-                        sprayDirection.multiplyBy(getRandomInt(30,10)/10);
+                        sprayDirection.multiplyBy(getRandomInt(10,30)/10);
                         sprayDirection.setDirection(sprayDirection.getDirection() + getRandomInt(-20,20)/50);
-                        this.createParticle(this, car.position.x, car.position.y, particleType, sprayDirection.x, sprayDirection.y, carSpeed);
+                        console.log(sprayDirection)
+                        this.createParticle(car.position.x, car.position.y, particleType, sprayDirection.x, sprayDirection.y, carSpeed);
                     }
                 }
                 else if(carPhysics.currentTerrain == "GRASS"){

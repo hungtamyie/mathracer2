@@ -23,6 +23,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 5,
                 flightSpeed: [3,10],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -50,6 +54,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 5,
                 flightSpeed: [3,10],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -77,6 +85,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 5,
                 flightSpeed: [3,10],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -104,6 +116,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 5,
                 flightSpeed: [3,10],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -131,6 +147,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 5,
                 flightSpeed: [3,10],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -158,6 +178,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 5,
                 flightSpeed: [3,10],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -186,6 +210,10 @@ var OBSTACLE_DATA = {
                 speedThreshold: 5,
                 flightSpeed: [3,10],
             },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
+            }
         },
     },
     "treeH": {
@@ -212,6 +240,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 5,
                 flightSpeed: [3,10],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -233,6 +265,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.7,
             }
         },
     },
@@ -254,6 +290,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.7,
             }
         },
     },
@@ -275,6 +315,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.7,
             }
         },
     },
@@ -296,6 +340,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.7,
             }
         },
     },
@@ -311,7 +359,18 @@ var OBSTACLE_DATA = {
             radius: 8,
         }],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            particles: {
+                type: "rock",
+                amount: 10,
+                speedThreshold: 4,
+                flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.7,
+            }
+        },
     },
     "treeTiny": {
         sx: 0,
@@ -331,6 +390,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "tree_hit",
+                volume: 0.5,
             }
         },
     },
@@ -352,6 +415,10 @@ var OBSTACLE_DATA = {
                 value: 30,
                 changeRate: 1, 
                 movementAmount: 2,
+            },
+            sound: {
+                soundName: "tire_hit",
+                volume: 0.5,
             }
         },
     },
@@ -373,6 +440,10 @@ var OBSTACLE_DATA = {
                 value: 30,
                 changeRate: 1, 
                 movementAmount: 2,
+            },
+            sound: {
+                soundName: "tire_hit",
+                volume: 0.5,
             }
         },
     },
@@ -415,6 +486,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.5,
             }
         },
     },
@@ -436,6 +511,10 @@ var OBSTACLE_DATA = {
                 value: 30,
                 changeRate: 2, 
                 movementAmount: 1,
+            },
+            sound: {
+                soundName: "tire_hit",
+                volume: 0.5,
             }
         },
     },
@@ -457,6 +536,10 @@ var OBSTACLE_DATA = {
                 value: 30,
                 changeRate: 2, 
                 movementAmount: 1,
+            },
+            sound: {
+                soundName: "tire_hit",
+                volume: 0.5,
             }
         },
     },
@@ -478,6 +561,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.5,
             }
         },
     },
@@ -499,6 +586,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.5,
             }
         },
     },
@@ -520,6 +611,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.5,
             }
         },
     },
@@ -541,6 +636,10 @@ var OBSTACLE_DATA = {
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
+            },
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.5,
             }
         },
     },
@@ -558,7 +657,12 @@ var OBSTACLE_DATA = {
                  {type: "line", p1: {x: -20, y: -110}, p2: {x: 62, y: -25}},
                  {type: "line", p1: {x: -20, y: -125}, p2: {x: 65, y: -35}}],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.5,
+            },
+        }
     },
     "pitStopBack": {
         sx: 5,
@@ -569,6 +673,11 @@ var OBSTACLE_DATA = {
         dh: -25,
         hitbox: [],
         bounce: 1.3,
-        hitBehavior: "none",
+        hitBehavior: {
+            sound: {
+                soundName: "rock_hit",
+                volume: 0.5,
+            }
+        },
     },
 }

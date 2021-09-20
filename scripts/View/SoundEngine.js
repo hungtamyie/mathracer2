@@ -2,7 +2,33 @@ class SoundEngine {
     constructor(game){
         this.game = game;
         this.carSoundHandlers = {};
-        
+    }
+    
+    coupleToGame(game){
+        this.game = game;
+        let self = this;
+        this.collisionListenerId = "listen_" + makeId(10);
+        this.game.physicsOutputStream.addListener(this.collisionListenerId, "collision", function(data){self.playHitSound(data.x, data.y, data.obstacle, data.hitSpeed, data.playerVelocity)});
+    }
+    
+    playHitSound(x, y, obstacle, hitSpeed, playerVelocity){
+        let hitBehavior = OBSTACLE_DATA[obstacle.obstacleSpecs.obstacleType].hitBehavior;
+        if(typeof(hitBehavior.sound) != "undefined" && hitSpeed > 1){
+                let sound = G.audioContext.createBufferSource();
+                sound.buffer = G.assetHandler.sounds[hitBehavior.sound.soundName];
+                let soundGain = G.audioContext.createGain();
+                let volume = hitBehavior.sound.volume;
+                volume *= hitSpeed/2;
+                if(volume > 2){
+                    volume = 2;
+                }
+                if(volume < 0){
+                    volume = 0;
+                }
+                soundGain.gain.value = volume;
+                sound.connect(soundGain).connect(G.audioContext.destination);
+                sound.start(0);
+        }
     }
     
     addCarSoundHandler(id, carType){
@@ -46,10 +72,13 @@ class SoundEngine {
 
 class CarSoundHandler {
     constructor(carType){
+        this.carGain = G.audioContext.createGain();
+        this.carGain.gain.value = 1;
+        
         this.idleSound = G.audioContext.createBufferSource();
         this.idleSound.buffer = G.assetHandler.sounds[carType + '_idle'];
         this.idleSoundGain = G.audioContext.createGain();
-        this.idleSound.connect(this.idleSoundGain).connect(G.audioContext.destination);
+        this.idleSound.connect(this.idleSoundGain).connect(this.carGain).connect(G.audioContext.destination);
         this.idleSound.loop = true;
         this.idleSoundGain.gain.value = 0;
         this.idleSound.start(0);
@@ -57,7 +86,7 @@ class CarSoundHandler {
         this.lowRpmSound = G.audioContext.createBufferSource();
         this.lowRpmSound.buffer = G.assetHandler.sounds[carType + '_100rpm'];
         this.lowRpmSoundGain = G.audioContext.createGain();
-        this.lowRpmSound.connect(this.lowRpmSoundGain).connect(G.audioContext.destination);
+        this.lowRpmSound.connect(this.lowRpmSoundGain).connect(this.carGain).connect(G.audioContext.destination);
         this.lowRpmSound.loop = true;
         this.lowRpmSoundGain.gain.value = 0;
         this.lowRpmSound.start(0);
@@ -65,7 +94,7 @@ class CarSoundHandler {
         this.squealSound = G.audioContext.createBufferSource();
         this.squealSound.buffer = G.assetHandler.sounds['squeal_loop'];
         this.squealSoundGain = G.audioContext.createGain();
-        this.squealSound.connect(this.squealSoundGain).connect(G.audioContext.destination);
+        this.squealSound.connect(this.squealSoundGain).connect(this.carGain).connect(G.audioContext.destination);
         this.squealSound.loop = true;
         this.squealSoundGain.gain.value = 0;
         this.squealSound.start(0);
@@ -73,7 +102,7 @@ class CarSoundHandler {
         this.slideSound = G.audioContext.createBufferSource();
         this.slideSound.buffer = G.assetHandler.sounds['slide_loop'];
         this.slideSoundGain = G.audioContext.createGain();
-        this.slideSound.connect(this.slideSoundGain).connect(G.audioContext.destination);
+        this.slideSound.connect(this.slideSoundGain).connect(this.carGain).connect(G.audioContext.destination);
         this.slideSound.loop = true;
         this.slideSoundGain.gain.value = 0;
         this.slideSound.start(0);
