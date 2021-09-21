@@ -19,7 +19,8 @@ var PlayerData = {
             distanceInFront: 30,
         }
     },
-    chosenPreset: 2,
+    chosenPreset: (parseInt(prompt("Do you want car #1, 2, or 3? #1 performs best, 3 is a close second. 2 is for beginners"))-1),
+    //chosenPreset: 3,
     carPresets: [
         {
             name: "Preset_1",
@@ -66,6 +67,25 @@ var PlayerData = {
             decal: "stripe",
             spoiler: "stock",
             carColor: [[207, 187, 39], [214, 190, 32], [234, 212, 67]],
+            trimColor: [255, 255, 200],
+            decalColor: [255, 0, 15],
+            gas: "canola",
+            upgrades: {
+                acceleration: 1,
+                topSpeed: 0,
+                braking: 0,
+                handling: 0,
+                boost: 0,
+                tractionControl: 0,
+            },
+        },
+        {
+            name: "Preset_4",
+            car: "zipline",
+            wheels: "standard",
+            decal: "stripe",
+            spoiler: "stock",
+            carColor: [[11, 25, 245], [21, 145, 251], [22, 179, 252]],
             trimColor: [255, 255, 200],
             decalColor: [255, 0, 15],
             gas: "canola",

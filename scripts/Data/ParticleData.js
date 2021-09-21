@@ -1,7 +1,4 @@
 var PARTICLE_DATA = {
-    grass_green: [
-        
-    ],
     tire_smoke: [
         {
             sx: 0,
@@ -120,7 +117,7 @@ var PARTICLE_DATA = {
             randomize: true,
             frameChangeSpeed: 5,
             lifetime: 15,
-            fadeSpeed: -0.05,
+            fadeSpeed: -0.02,
             gravity: true,
         },
         {
@@ -131,7 +128,7 @@ var PARTICLE_DATA = {
             randomize: true,
             frameChangeSpeed: 5,
             lifetime: 10,
-            fadeSpeed: -0.05,
+            fadeSpeed: -0.02,
             gravity: true,
         },
         {
@@ -142,6 +139,17 @@ var PARTICLE_DATA = {
             randomize: true,
             frameChangeSpeed: 5,
             lifetime: 6,
+            fadeSpeed: -0.02,
+            gravity: true,
+        },
+        {
+            sx: 4,
+            sy: 7,
+            size: 16,
+            frames: 2,
+            randomize: true,
+            frameChangeSpeed: 2,
+            lifetime: 3,
             fadeSpeed: -0.05,
             gravity: true,
         },

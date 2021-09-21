@@ -10,7 +10,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 13,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -41,7 +41,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 15,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -72,7 +72,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 13,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -103,7 +103,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 15,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -134,7 +134,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 15,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -165,7 +165,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 15,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -196,7 +196,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 10,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -227,7 +227,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 12,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             filter: {
                 type: "shake",
@@ -258,13 +258,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 18,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -289,7 +289,7 @@ var OBSTACLE_DATA = {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -308,13 +308,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 18,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -339,7 +339,7 @@ var OBSTACLE_DATA = {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -358,13 +358,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 8,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -386,7 +386,7 @@ var OBSTACLE_DATA = {
         bounce: 1.3,
         hitBehavior: {
             particles: {
-                type: "rock",
+                type: "tree_bark",
                 amount: 10,
                 speedThreshold: 4,
                 flightSpeed: [4,5],
@@ -408,7 +408,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 8,
         }],
-        bounce: 1.3,
+        bounce: 1.4,
         hitBehavior: {
             filter: {
                 type: "squash",
@@ -433,7 +433,7 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 8,
         }],
-        bounce: 1.3,
+        bounce: 1.4,
         hitBehavior: {
             filter: {
                 type: "squash",
@@ -458,13 +458,17 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 8,
         }],
-        bounce: 1.3,
+        bounce: 1.4,
         hitBehavior: {
             filter: {
                 type: "squash",
                 value: 30,
                 changeRate: 1, 
                 movementAmount: 2,
+            },
+            sound: {
+                soundName: "tire_hit",
+                volume: 0.5,
             }
         },
     },
@@ -479,13 +483,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 9,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -513,7 +517,7 @@ var OBSTACLE_DATA = {
                 movementAmount: 1,
             },
             sound: {
-                soundName: "tire_hit",
+                soundName: "tree_hit",
                 volume: 0.5,
             }
         },
@@ -538,7 +542,7 @@ var OBSTACLE_DATA = {
                 movementAmount: 1,
             },
             sound: {
-                soundName: "tire_hit",
+                soundName: "tree_hit",
                 volume: 0.5,
             }
         },
@@ -554,13 +558,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 8,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -579,13 +583,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 8,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -604,13 +608,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 6,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -629,13 +633,13 @@ var OBSTACLE_DATA = {
             type: "circle",
             radius: 8,
         }],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             particles: {
                 type: "rock",
                 amount: 10,
                 speedThreshold: 4,
-                flightSpeed: [4,5],
+                flightSpeed: [2,6],
             },
             sound: {
                 soundName: "rock_hit",
@@ -656,7 +660,7 @@ var OBSTACLE_DATA = {
                  {type: "line", p1: {x: 15, y: 20}, p2: {x: 20, y: 15}},
                  {type: "line", p1: {x: -20, y: -110}, p2: {x: 62, y: -25}},
                  {type: "line", p1: {x: -20, y: -125}, p2: {x: 65, y: -35}}],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             sound: {
                 soundName: "rock_hit",
@@ -672,7 +676,7 @@ var OBSTACLE_DATA = {
         scale: 32,
         dh: -25,
         hitbox: [],
-        bounce: 1.3,
+        bounce: 1.1,
         hitBehavior: {
             sound: {
                 soundName: "rock_hit",

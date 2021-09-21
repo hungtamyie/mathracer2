@@ -7,15 +7,19 @@ class Game {
         this.ghosts = {};
         this.checkpoints = {};
         this.playerCar;
+        this.pitStopZone;
         this.checkpointData = {
             order: [],
             next: 0,
             previousDistanceFromNext: Infinity,
+            hasPitStopped: false,
+            lapsFinished: 0,
+            timeStarted: new Date(),
         };
         this.physicsOutputStream = new OutputStream();
         let self = this;
         this.collisionListenerId = "listen_" + makeId(10);
-        this.physicsOutputStream.addListener(this.collisionListenerId, "collision", function(data){self.applyHitBehavior(data.x, data.y, data.obstacle, data.hitSpeed, data.playerVelocity)});
+        this.physicsOutputStream.addListener(this.collisionListenerId, "collision", function(eventType, data){self.applyHitBehavior(data.x, data.y, data.obstacle, data.hitSpeed, data.playerVelocity)});
         
         
         this.loadInBackground();
@@ -43,6 +47,11 @@ class Game {
         if(carPreset.spoiler != "none"){
             newCar.carSpecs.applyModifiers(CAR_DATA[carPreset.car].spoilers[carPreset.spoiler].modifiers);
         }
+        if(carPreset.wheels != "none"){
+            newCar.carSpecs.applyModifiers(CAR_DATA[carPreset.car].wheels[carPreset.wheels].modifiers);
+        }
+        newCar.carPhysics.currentFuel = newCar.carSpecs.maxFuel;
+        
         newCar.addComponent("visualData", (new VisualData(("sprite_" + id), 0, 0, CAR_DATA[carPreset.car].spriteDimensions.drawSize, CAR_DATA[carPreset.car].spriteDimensions.drawSize, 1, CAR_DATA[carPreset.car].spriteDimensions.drawHeightOffset)));
         newCar.addComponent("hitbox", (new Hitbox()));
         this.updateCarHitbox(newCar);
@@ -66,6 +75,13 @@ class Game {
             let newObstacle = this.createObstacleEntity(obstacles[i][0], obstacles[i][1], obstacles[i][2]);
             this.entities[newObstacle.id] = newObstacle;
             this.obstacles[newObstacle.id] = newObstacle;
+            if(obstacles[i][0] == "pitStopFront"){
+                let pitStopZone = new Entity("pitStopZone");
+                pitStopZone.addComponent("position", (new Position(obstacles[i][1], obstacles[i][2])));
+                pitStopZone.addComponent("hitbox", (new Hitbox([{type: "circle", center: {x: obstacles[i][1]-10, y: obstacles[i][2]-50}, radius: 10}])));
+                this.entities[pitStopZone.id] = pitStopZone;
+                this.pitStopZone = pitStopZone;                      
+            }
         }
     }
     loadInCheckpoints(){
@@ -162,9 +178,9 @@ class Game {
         }
     }
     
-    tick(delta){     
+    tick(delta){
+        console.log(this.checkpointData.lapsFinished);
         let entities = this.entities
-        let particleNumber = 0;
         for (const key in entities) {   
             if (entities.hasOwnProperty(key)) {
                 let entity = entities[key];
@@ -175,15 +191,13 @@ class Game {
                     entity.particleCounter.update(delta);
                 }
                 if(entity.hasComponent("particlePhysics")){
-                    particleNumber++
                     entity.particlePhysics.update(delta);
                     entity.position.x += entity.particlePhysics.velocity.x * delta;
                     entity.position.y += entity.particlePhysics.velocity.y * delta;
                     if(entity.particlePhysics.gravity == true){
                         entity.particlePhysics.velocity.y += 0.4*delta;
                     }
-                    //console.log(entity.particlePhysics.lifetime)
-                    if(entity.particlePhysics.lifetime <= 0){
+                    if(entity.particlePhysics.lifetime <= 0 || typeof(entity.particlePhysics.lifetime) == "undefined"){
                         this.deleteEntity(entity.id);
                     }
                 }
@@ -192,10 +206,15 @@ class Game {
                 }
                 if(entity.hasComponent("carPhysics")){
                     this.createCarParticles(entity);
+                    if(entity.carPhysics.accelerating == 1 || (entity.carPhysics.accelerating == -1 && entity.carPhysics.velocityDirection < 0)){
+                        entity.carPhysics.currentFuel -= entity.carSpecs.fuelDecayRate/50 * delta;
+                        if(entity.carPhysics.currentFuel < 0){
+                            entity.carPhysics.currentFuel = 0;
+                        }
+                    }
                 }
             }
         }
-        console.log(particleNumber);
         if(this.playerCar){
             this.updateCarHitbox(this.playerCar);
             this.updateCarPhysics(delta, this.playerCar);
@@ -237,6 +256,11 @@ class Game {
                     ]
                 )
             }
+        }
+        if(carPhysics.currentFuel == 0 && currentTerrain != "PIT_ROAD"){
+            carSpecs.applyModifiers (
+                [["topSpeed", "MULTIPLY", 0.2]],
+            )
         }
         
         let accelerationVector;
@@ -414,7 +438,6 @@ class Game {
             for(let i = 0; i < hitBehavior.particles.amount; i++){
                 let velocityVector = new Vector(1,0);
                 velocityVector.setDirection(playerVelocity.getDirection());
-                velocityVector.multiplyBy(-1);
                 velocityVector.setDirection(velocityVector.getDirection() + getRandomInt(-10,10)/6);
                 velocityVector.setMagnitude(getRandomInt(hitBehavior.particles.flightSpeed[0]/2,hitBehavior.particles.flightSpeed[1]/2));
                 velocityVector.y -= 3;
@@ -435,6 +458,16 @@ class Game {
             this.checkpointData.next++;
             if(this.checkpointData.next >= this.checkpointData.order.length){
                 this.checkpointData.next = 0;
+            }
+            if(this.checkpointData.next == 1){
+                this.physicsOutputStream.reportEvent("checkpoint", this.checkpointData.lapsFinished)
+                if(this.checkpointData.lapsFinished == 0){
+                    this.checkpointData.timeStarted = new Date();
+                }
+                this.checkpointData.lapsFinished++;
+            }
+            if(this.checkpointData.next == 2){
+                this.checkpointData.hasPitStopped = false;
             }
             this.checkpoints[this.checkpointData.order[this.checkpointData.next]].visualData.noShow = false;
         }

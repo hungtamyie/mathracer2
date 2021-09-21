@@ -6,6 +6,7 @@ class CarPhysics {
         this.turning = 0;
         this.tractionControl = false;
         
+        this.currentFuel = 0;
         this.boosting = false;
         this.boostTimer = 0;
         this.rpm = 0;

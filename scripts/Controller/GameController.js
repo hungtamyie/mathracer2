@@ -150,6 +150,7 @@ class GameController {
                     G.soundEngine.updateCarSound(this.myCarId, this.game.entities[this.myCarId]);
                 }
                 this.renderer.render();
+                G.gameUIHandler.update();
                 this.lastTickTimestamp = currentTickTimestamp// - (delta % fpsInterval);
             }
             window.requestAnimationFrame(this.tick.bind(this));

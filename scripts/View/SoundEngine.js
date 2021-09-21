@@ -1,6 +1,6 @@
 class SoundEngine {
-    constructor(game){
-        this.game = game;
+    constructor(){
+        this.game = undefined;
         this.carSoundHandlers = {};
     }
     
@@ -8,7 +8,9 @@ class SoundEngine {
         this.game = game;
         let self = this;
         this.collisionListenerId = "listen_" + makeId(10);
-        this.game.physicsOutputStream.addListener(this.collisionListenerId, "collision", function(data){self.playHitSound(data.x, data.y, data.obstacle, data.hitSpeed, data.playerVelocity)});
+        this.collisionListenerId2 = "listen_" + makeId(10);
+        this.game.physicsOutputStream.addListener(this.collisionListenerId, "collision", function(eventType, data){self.playHitSound(data.x, data.y, data.obstacle, data.hitSpeed, data.playerVelocity)});
+        this.game.physicsOutputStream.addListener(this.collisionListenerId2, "checkpoint", function(eventType, data){self.playCheckpointSound()});
     }
     
     playHitSound(x, y, obstacle, hitSpeed, playerVelocity){
@@ -29,6 +31,13 @@ class SoundEngine {
                 sound.connect(soundGain).connect(G.audioContext.destination);
                 sound.start(0);
         }
+    }
+    
+    playCheckpointSound(){
+        let sound = G.audioContext.createBufferSource();
+        sound.buffer = G.assetHandler.sounds.bell;
+        sound.connect(G.audioContext.destination);
+        sound.start(0);
     }
     
     addCarSoundHandler(id, carType){

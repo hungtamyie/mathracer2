@@ -15,8 +15,8 @@ class OutputStream {
         for (const key in this.listeners) {   
             if (this.listeners.hasOwnProperty(key)) {
                 let listener = this.listeners[key];
-                if(listener.eventType == eventType){
-                    listener.callback(data);
+                if(listener.eventType == eventType || listener.eventType == "ANY"){
+                    listener.callback(eventType, data);
                 }
             }
         }

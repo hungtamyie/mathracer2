@@ -1,6 +1,13 @@
 body {
     margin: 0px;
     overflow: hidden;
+    font-family: 'VT323', monospace;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;          /* Firefox */
+    image-rendering: -o-crisp-edges;            /* Opera */
+    image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming)*/
+    -ms-interpolation-mode: nearest-neighbor;   /* IE (non-standard property) */
+    image-rendering: pixelated; /* Webkit (non-standard naming)*/
 }
 
 #gameScreen {
@@ -15,12 +22,6 @@ body {
     left: 0px;
     top: 0px;
     display: block;
-    image-rendering: crisp-edges;
-    image-rendering: -moz-crisp-edges;          /* Firefox */
-    image-rendering: -o-crisp-edges;            /* Opera */
-    image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming)*/
-    -ms-interpolation-mode: nearest-neighbor;   /* IE (non-standard property) */
-    image-rendering: pixelated; /* Webkit (non-standard naming)*/
 }
 
 .enlarged {
@@ -33,6 +34,81 @@ body {
     top: 0px;
     display: block;
     z-index: 100000;
+}
+
+.dashboard {
+    position: fixed;
+    bottom: 0px;
+    display: block;
+    width: 440px;
+    height: 180px;
+    right: 15px;
+    z-index: 200000;
+    background-size: cover;
+     display: block;
+}
+
+.fuelBar {
+    width: 202px;
+    height: 22px;
+    position: absolute;
+    left: 59px;
+    top: 83px;
+    background: red;
+    display: block;
+}
+
+.speedGauge {
+    width: 150px;
+    height: 100px;
+    position: absolute;
+    left: 272px;
+    color: white;
+    text-align: center;
+    top: 50px;
+    font-size: 65px;
+    display: block;
+}
+
+.gasPump {
+    width: 382px;
+    height: 460px;
+    position: absolute;
+    top: -280px;
+    left: -270px;
+    background: url('../images/ui/gas_pump.png');
+    background-size: cover;
+    text-align: center;
+    display: block;
+}
+
+.problemTextField {
+    position: absolute;
+    top: -200px;
+    left: -200px;
+    font-size: 85px;
+    text-align: center;
+    color: white;
+}
+
+.solutionTextField {
+    position: absolute;
+    top: -90px;
+    width: 100px;
+    left: -180px;
+    font-size: 50px;
+    text-align: center;
+    color: white;
+}
+
+.lmao {
+    position: absolute;
+    top: -590px;
+    width: 600px;
+    left: -10px;
+    font-size: 50px;
+    text-align: center;
+    color: white;
 }
 
 #editorTools {
