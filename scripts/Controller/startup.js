@@ -14,15 +14,15 @@ window.onload = function(){
             G.S = window.innerWidth/800;
         }
     }
-    let imagesToLoad = [["entities", "images/entities.png"],
-                        ["checkpoints", "images/checkpoints.png"],
-                        ["particles", "images/particles.png"],
-                        ["Isere_map", "images/maps/isere_map.png"],
-                        ["Isere_data", "images/maps/isere_data.png"],
-                        ["striker", "images/cars/striker.png"],
-                        ["zipline", "images/cars/zipline.png"],
-                        ["kart", "images/cars/kart.png"],
-                        ["striker_dashboard", "images/ui/dashboards/striker_dashboard.png"],
+    let imagesToLoad = [["entities", "./images/entities.png"],
+                        ["checkpoints", "./images/checkpoints.png"],
+                        ["particles", "./images/particles.png"],
+                        ["Isere_map", "./images/maps/isere_map.png"],
+                        ["Isere_data", "./images/maps/isere_data.png"],
+                        ["striker", "./images/cars/striker.png"],
+                        ["zipline", "./images/cars/zipline.png"],
+                        ["kart", "./images/cars/kart.png"],
+                        ["striker_dashboard", "./images/ui/dashboards/striker_dashboard.png"],
                     ];
     let soundsToLoad = [
         ["striker_idle", "sounds/car/striker_idle.wav"],
