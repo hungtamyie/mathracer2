@@ -69,10 +69,10 @@ class GameController {
                 let myCar = this.game.entities[this.myCarId];
                 let keyBinds = PlayerData.settings.keybinds;
                 let validInput = false;
-                if(data == keyBinds.left) {this.myInputs.left = isKeyDown; validInput = true;}
-                if(data == keyBinds.right) {this.myInputs.right = isKeyDown; validInput = true;}
-                if(data == keyBinds.drive) {this.myInputs.drive = isKeyDown; validInput = true;}
-                if(data == keyBinds.brake) {this.myInputs.brake = isKeyDown; validInput = true;}
+                if(data == keyBinds.left || data=="arrowleft") {this.myInputs.left = isKeyDown; validInput = true;}
+                if(data == keyBinds.right || data=="arrowright") {this.myInputs.right = isKeyDown; validInput = true;}
+                if(data == keyBinds.drive || data=="arrowup") {this.myInputs.drive = isKeyDown; validInput = true;}
+                if(data == keyBinds.brake || data=="arrowdown") {this.myInputs.brake = isKeyDown; validInput = true;}
                 if(data == keyBinds.traction) {this.myInputs.traction = isKeyDown; validInput = true;}
                 
                 if(validInput){
