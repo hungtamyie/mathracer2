@@ -216,9 +216,10 @@ class Game {
             }
         }
         if(this.playerCar){
+            let oldCarPosition = {x: this.playerCar.position.x, y: this.playerCar.position.y};
             this.updateCarHitbox(this.playerCar);
             this.updateCarPhysics(delta, this.playerCar);
-            this.collideCar(this.playerCar);
+            this.collideCar(this.playerCar, oldCarPosition);
             this.checkCheckpoints(this.playerCar);
         }
     }
@@ -315,7 +316,7 @@ class Game {
         
         let carMomentumVector = carVelocity.copy();
         let carDrivingVector = carDirection.copy();
-        let gripRatio = (100-(carSpecs.grip - (carSpecs.gripLossSpeedMultiplier/5 * carSpeed) - (carSpecs.gripLossAngleMultiplier/5 * Math.abs(angleDifference))))/100;
+        let gripRatio = (100-(carSpecs.grip - (carSpecs.gripLossSpeedMultiplier/5 * carSpeed) - (carSpecs.gripLossAngleMultiplier/5 * Math.abs(angleDifference * delta))))/100;
         if(gripRatio < 0.2){
             gripRatio = 0.2;
         }
@@ -324,7 +325,7 @@ class Game {
         }
     
         let speedMinusDrag = carSpeed;
-        speedMinusDrag -= carSpecs.driftingSpeedLoss/100 * Math.abs(carVelocity.angleBetween(carDirection));
+        speedMinusDrag -= carSpecs.driftingSpeedLoss/100 * Math.abs(carVelocity.angleBetween(carDirection)*delta);
         speedMinusDrag -= carSpecs.straightSpeedLoss/1000;
         if(speedMinusDrag < 0){
             speedMinusDrag = 0;
@@ -396,14 +397,39 @@ class Game {
         car.hitbox.setHitbox(newHitbox);
     }
 
-    collideCar(car){
+    collideCar(car, oldCarPosition){
         for (const key in this.obstacles) {   
             if (this.obstacles.hasOwnProperty(key)) {
                 let obstacle = this.obstacles[key];
                 let distance = Math.sqrt(Math.pow(car.position.x - obstacle.position.x,2)+Math.pow(car.position.y - obstacle.position.y,2));
                 if(distance < 200){
+                    
                     let collisionResult = car.hitbox.collide(obstacle.hitbox);
                     if(collisionResult){
+                        let movementInPastTick = new Vector(oldCarPosition.x-car.position.x, oldCarPosition.y-car.position.y);
+                        car.position.x = oldCarPosition.x;
+                        car.position.y = oldCarPosition.y;
+                        let potentialCollisionTime = [0,1];
+                        for(let i = 0; i < 10; i++){
+                            let t = (potentialCollisionTime[1] - potentialCollisionTime[0])/2;
+                            car.position.x = oldCarPosition.x + movementInPastTick.x*t;
+                            car.position.y = oldCarPosition.y + movementInPastTick.y*t;
+                            collisionResult = car.hitbox.collide(obstacle.hitbox);
+                            if(collisionResult){
+                                //The car collided earlier
+                                potentialCollisionTime[1] = t;
+                            }
+                            else {
+                                //The car collided later
+                                potentialCollisionTime[0] = t;
+                            }
+                        }
+                        let t = potentialCollisionTime[1];
+                        car.position.x = oldCarPosition.x + movementInPastTick.x*t;
+                        car.position.y = oldCarPosition.y + movementInPastTick.y*t;
+                        collisionResult = car.hitbox.collide(obstacle.hitbox);
+                        
+                        
                         let vectorBetween = new Vector(collisionResult[0] - car.position.x, collisionResult[1] - car.position.y);
                         vectorBetween.setMagnitude(CAR_DATA[car.carSpecs.carBodyName].hitboxData.radius + CAR_DATA[car.carSpecs.carBodyName].hitboxData.distanceBetweenCircles + 0.1);
                         car.position.x = collisionResult[0] - vectorBetween.x;

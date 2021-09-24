@@ -75,8 +75,8 @@ var TERRAIN_MODIFIERS = {
     "GRASS": [
         ["topSpeed", "MULTIPLY", 0.9],
         ["straightSpeedLoss", "ADD", 5],
-        ["grip", "MULTIPLY", 0.5],
-        ["gripLossSpeedMultiplier", "ADD", 4],
+        ["grip", "MULTIPLY", 0.9],
+        ["gripLossSpeedMultiplier", "ADD", 0.1],
         ["accelerationLowSpeed", "DIVIDE", 2],
         ["accelerationMidSpeed", "DIVIDE", 4],
         ["accelerationHighSpeed", "DIVIDE", 4],

@@ -1,7 +1,7 @@
 var PlayerData = {
     settings: {
         visual: {
-            fps: 70,
+            fps: 60,
             carDrawDepth: 2,
             carDrawDirections: 92,
             particleNumber: 50,
@@ -20,7 +20,7 @@ var PlayerData = {
         }
     },
     chosenPreset: (parseInt(prompt("Do you want car #1, 2, or 3? #1 performs best, 3 is a close second. 2 is for beginners"))-1),
-    //chosenPreset: 3,
+    //chosenPreset: 2,
     carPresets: [
         {
             name: "Preset_1",
